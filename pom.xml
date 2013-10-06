@@ -13,8 +13,8 @@
 	<inceptionYear>2011</inceptionYear>
 	<url>http://gatling.io</url>
 
-	<name>${project.artifactdId}</name>
-	<description>${project.artifactdId}</description>
+	<name>gatling-maven-plugin</name>
+	<description>gatling-maven-plugin</description>
 
 	<licenses>
 		<license>
