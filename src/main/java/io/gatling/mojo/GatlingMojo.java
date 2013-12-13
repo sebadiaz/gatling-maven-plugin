@@ -255,6 +255,8 @@ public class GatlingMojo extends AbstractMojo {
 			} catch (ExecuteException e) {
 				if (e.getExitValue() == GatlingStatusCodes.assertionsFailed())
 					throw new GatlingSimulationAssertionsFailedException(e);
+				else 
+					throw e; /* issue 1482*/
 			}
 		} else {
 			GatlingJavaMainCallerInProcess caller = new GatlingJavaMainCallerInProcess(this, GATLING_MAIN_CLASS, testClasspath, gatlingArgs);
@@ -370,4 +372,5 @@ public class GatlingMojo extends AbstractMojo {
 		getLog().debug("resolved simulation classes: " + includedClassNames);
 		return includedClassNames;
 	}
+	
 }
