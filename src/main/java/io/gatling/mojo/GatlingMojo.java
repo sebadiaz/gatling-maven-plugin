@@ -113,7 +113,7 @@ public class GatlingMojo extends AbstractMojo {
 	 * A name of a Simulation class to run. This takes precedence over the
 	 * includes / excludes parameters.
 	 * 
-	 * @parameter property="gatling.simulationClass" alias="s"
+	 * @parameter property="gatling.simulationClass" alias="sc"
 	 * @description The name of the Simulation class to run
 	 */
 	private String simulationClass;
