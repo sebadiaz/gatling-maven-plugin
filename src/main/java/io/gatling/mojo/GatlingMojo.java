@@ -279,9 +279,7 @@ public class GatlingMojo extends AbstractMojo {
 	}
 
 	private List<String> jvmArgs() {
-		List<String> jvmArguments = (jvmArgs != null) ? jvmArgs : new ArrayList<String>();
-		jvmArguments.addAll(Arrays.asList(JVM_ARGS));
-		return jvmArguments;
+		return jvmArgs != null ? jvmArgs : Arrays.asList(JVM_ARGS);
 	}
 
 	private List<String> gatlingArgs() throws Exception {
@@ -372,5 +370,4 @@ public class GatlingMojo extends AbstractMojo {
 		getLog().debug("resolved simulation classes: " + includedClassNames);
 		return includedClassNames;
 	}
-	
 }
