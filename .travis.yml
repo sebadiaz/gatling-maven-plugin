@@ -1,0 +1,12 @@
+language: java
+before_script: ./make_credentials.py
+script: mvn test
+
+env:
+  global:
+    - secure: "O6aIqekazY38VipjHK0hBjaiK9A5VoXCNQNykudpdCceNauOBy8C8c7PvMtPiaqk1RLrfiIQI2AYEv6ERgSf6dLX32FcGufLomxBooBvtLSh8zwz/Ip8/iIseCsaVnF6Ds9RX/ThQziSDTWoX+pGsKFsQKKjXzZ98U/6/eL2Akc="
+    - secure: "ZQ9dMQhVu0JOreIZby+nMjwOPlK9MuhvSOBcYqH0WtL4GWezso4XqqV3RH6oDr/HaoG/G/V811gbR4yn5RUipIyPIQiJ6/CV168IARj08XiZDMddNcprd5TJb0OGZI4KsJtOxAOleVwlwdJBj0ZVcWmqfodKnL4wn6oOWyH1tNg="
+
+# Publish to Sonatype if building master
+after_success:
+  - "[[ $TRAVIS_BRANCH == \"master\" ]] && mvn deploy"
