@@ -230,6 +230,7 @@
 							<exclude>**/LICENSE</exclude>
 							<exclude>**/*.md</exclude>
 							<exclude>.gitignore</exclude>
+							<exclude>make_credentials.py</exclude>
 						</excludes>
 					</configuration>
 					<executions>
