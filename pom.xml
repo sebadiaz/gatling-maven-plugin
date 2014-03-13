@@ -1,5 +1,6 @@
 <?xml version="1.0"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>org.sonatype.oss</groupId>
@@ -52,7 +53,7 @@
 		<gatling.version>2.0.0-SNAPSHOT</gatling.version>
 		<commons-exec.version>1.2</commons-exec.version>
 		<junit.version>4.11</junit.version>
-		<maven2.version>2.2.1</maven2.version>
+		<maven3.version>3.0</maven3.version>
 		<scala-maven-plugin.version>3.1.6</scala-maven-plugin.version>
 		<maven-compiler-plugin.version>3.1</maven-compiler-plugin.version>
 		<maven-source-plugin.version>2.2.1</maven-source-plugin.version>
@@ -82,18 +83,8 @@
 			</dependency>
 			<dependency>
 				<groupId>org.apache.maven</groupId>
-				<artifactId>maven-project</artifactId>
-				<version>${maven2.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.apache.maven</groupId>
-				<artifactId>maven-toolchain</artifactId>
-				<version>${maven2.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.apache.maven</groupId>
 				<artifactId>maven-plugin-api</artifactId>
-				<version>${maven2.version}</version>
+				<version>${maven3.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>net.alchim31.maven</groupId>
@@ -114,24 +105,9 @@
 			<artifactId>commons-exec</artifactId>
 		</dependency>
 
-		<!-- Maven Dependencies -->
-		<dependency>
-			<groupId>org.apache.maven</groupId>
-			<artifactId>maven-project</artifactId>
-		</dependency>
 		<dependency>
 			<groupId>org.apache.maven</groupId>
 			<artifactId>maven-plugin-api</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.maven</groupId>
-			<artifactId>maven-toolchain</artifactId>
-			<exclusions>
-				<exclusion>
-					<groupId>org.slf4j</groupId>
-					<artifactId>slf4j-jdk14</artifactId>
-				</exclusion>
-			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>net.alchim31.maven</groupId>
@@ -174,6 +150,11 @@
 					<artifactId>plexus-archiver</artifactId>
 				</exclusion>
 			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<scope>test</scope>
 		</dependency>
 	</dependencies>
 
@@ -242,7 +223,7 @@
 						</execution>
 					</executions>
 				</plugin>
-				<!--This plugin's configuration is used to store Eclipse m2e settings
+				<!--This plugin's configuration is used to store Eclipse m2e settings 
 					only. It has no influence on the Maven build itself. -->
 				<plugin>
 					<groupId>org.eclipse.m2e</groupId>
