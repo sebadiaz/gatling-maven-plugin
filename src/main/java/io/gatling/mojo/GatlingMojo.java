@@ -17,12 +17,12 @@ package io.gatling.mojo;
 
 import static java.util.Arrays.asList;
 import static org.codehaus.plexus.util.StringUtils.trim;
+
 import io.gatling.app.CommandLineConstants;
 import io.gatling.app.GatlingStatusCodes;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import org.apache.commons.exec.ExecuteException;
@@ -41,7 +41,7 @@ import scala_maven_executions.MainWithArgsInFile;
 
 /**
  * Mojo to execute Gatling.
- * 
+ *
  * @goal execute
  * @phase integration-test
  * @description Gatling Maven Plugin
@@ -49,17 +49,17 @@ import scala_maven_executions.MainWithArgsInFile;
  */
 public class GatlingMojo extends AbstractMojo {
 
-	public static final String[] DEFAULT_INCLUDES = { "**/*.scala" };
+	public static final String[] DEFAULT_INCLUDES = {"**/*.scala"};
 	public static final String GATLING_MAIN_CLASS = "io.gatling.app.Gatling";
 
-	public static final String[] JVM_ARGS = new String[] { "-server", "-XX:+UseThreadPriorities", "-XX:ThreadPriorityPolicy=42", "-Xms512M", "-Xmx512M", "-Xmn100M", "-Xss2M",
-	        "-XX:+HeapDumpOnOutOfMemoryError", "-XX:+AggressiveOpts", "-XX:+OptimizeStringConcat", "-XX:+UseFastAccessorMethods", "-XX:+UseParNewGC", "-XX:+UseConcMarkSweepGC",
-	        "-XX:+CMSParallelRemarkEnabled", "-XX:+CMSClassUnloadingEnabled", "-XX:CMSInitiatingOccupancyFraction=75", "-XX:+UseCMSInitiatingOccupancyOnly", "-XX:SurvivorRatio=8",
-	        "-XX:MaxTenuringThreshold=1" };
+	public static final String[] JVM_ARGS = new String[]{"-server", "-XX:+UseThreadPriorities", "-XX:ThreadPriorityPolicy=42", "-Xms512M", "-Xmx512M", "-Xmn100M", "-Xss2M",
+			"-XX:+HeapDumpOnOutOfMemoryError", "-XX:+AggressiveOpts", "-XX:+OptimizeStringConcat", "-XX:+UseFastAccessorMethods", "-XX:+UseParNewGC", "-XX:+UseConcMarkSweepGC",
+			"-XX:+CMSParallelRemarkEnabled", "-XX:+CMSClassUnloadingEnabled", "-XX:CMSInitiatingOccupancyFraction=75", "-XX:+UseCMSInitiatingOccupancyOnly", "-XX:SurvivorRatio=8",
+			"-XX:MaxTenuringThreshold=1"};
 
 	/**
 	 * Runs simulation but does not generate reports. By default false.
-	 * 
+	 *
 	 * @parameter property="gatling.noReports" alias="nr" default-value="false"
 	 * @description Runs simulation but does not generate reports
 	 */
@@ -67,7 +67,7 @@ public class GatlingMojo extends AbstractMojo {
 
 	/**
 	 * Generates the reports for the simulation in this folder.
-	 * 
+	 *
 	 * @parameter property="gatling.reportsOnly" alias="ro"
 	 * @description Generates the reports for the simulation in this folder
 	 */
@@ -75,18 +75,16 @@ public class GatlingMojo extends AbstractMojo {
 
 	/**
 	 * Uses this file as the configuration file.
-	 * 
-	 * @parameter property="gatling.configDir" alias="cd"
-	 *            default-value="${basedir}/src/test/resources"
+	 *
+	 * @parameter property="gatling.configDir" alias="cd" default-value="${basedir}/src/test/resources"
 	 * @description Uses this file as the configuration directory
 	 */
 	private File configDir;
 
 	/**
 	 * Uses this folder to discover simulations that could be run
-	 * 
-	 * @parameter property="gatling.simulationsFolder" alias="sf"
-	 *            default-value="${basedir}/src/test/scala"
+	 *
+	 * @parameter property="gatling.simulationsFolder" alias="sf" default-value="${basedir}/src/test/scala"
 	 * @description Uses this folder to discover simulations that could be run
 	 */
 	private File simulationsFolder;
@@ -94,7 +92,7 @@ public class GatlingMojo extends AbstractMojo {
 	/**
 	 * Sets the list of include patterns to use in directory scan for
 	 * simulations. Relative to simulationsFolder.
-	 * 
+	 *
 	 * @parameter
 	 * @description Include patterns to use in directory scan for simulations
 	 */
@@ -103,7 +101,7 @@ public class GatlingMojo extends AbstractMojo {
 	/**
 	 * Sets the list of exclude patterns to use in directory scan for
 	 * simulations. Relative to simulationsFolder.
-	 * 
+	 *
 	 * @parameter
 	 * @description Exclude patterns to use in directory scan for simulations
 	 */
@@ -112,7 +110,7 @@ public class GatlingMojo extends AbstractMojo {
 	/**
 	 * A name of a Simulation class to run. This takes precedence over the
 	 * includes / excludes parameters.
-	 * 
+	 *
 	 * @parameter property="gatling.simulationClass" alias="sc"
 	 * @description The name of the Simulation class to run
 	 */
@@ -120,42 +118,38 @@ public class GatlingMojo extends AbstractMojo {
 
 	/**
 	 * Uses this folder as the folder where feeders are stored
-	 * 
-	 * @parameter property="gatling.dataFolder" alias="df"
-	 *            default-value="${basedir}/src/test/resources/data"
+	 *
+	 * @parameter property="gatling.dataFolder" alias="df" default-value="${basedir}/src/test/resources/data"
 	 * @description Uses this folder as the folder where feeders are stored
 	 */
 	private File dataFolder;
 
 	/**
 	 * Uses this folder as the folder where request bodies are stored
-	 * 
-	 * @parameter property="gatling.requestBodiesFolder" alias="bf"
-	 *            default-value="${basedir}/src/test/resources/request-bodies"
-	 * @description Uses this folder as the folder where request bodies are
-	 *              stored
+	 *
+	 * @parameter property="gatling.requestBodiesFolder" alias="bf" default-value="${basedir}/src/test/resources/request-bodies"
+	 * @description Uses this folder as the folder where request bodies are stored
 	 */
 	private File requestBodiesFolder;
 
 	/**
 	 * Uses this folder as the folder where results are stored
-	 * 
-	 * @parameter property="gatling.resultsFolder" alias="rf"
-	 *            default-value="${basedir}/target/gatling/results"
+	 *
+	 * @parameter property="gatling.resultsFolder" alias="rf" default-value="${basedir}/target/gatling/results"
 	 * @description Uses this folder as the folder where results are stored
 	 */
 	private File resultsFolder;
 
 	/**
 	 * Extra JVM arguments to pass when running Gatling.
-	 * 
+	 *
 	 * @parameter
 	 */
 	private List<String> jvmArgs;
 
 	/**
 	 * Forks the execution of Gatling plugin into a separate JVM.
-	 * 
+	 *
 	 * @parameter property="gatling.fork" default-value="true"
 	 * @description Forks the execution of Gatling plugin into a separate JVM
 	 */
@@ -166,14 +160,14 @@ public class GatlingMojo extends AbstractMojo {
 	 * if there are Gatling test failures. This can be useful on a continuous
 	 * integration server, if your only option to be able to collect output
 	 * files, is if the project builds successfully.
-	 * 
+	 *
 	 * @parameter property="gatling.failOnError" default-value="true"
 	 */
 	private boolean failOnError;
 
 	/**
 	 * Force the name of the directory generated for the results of the run
-	 * 
+	 *
 	 * @parameter property="gatling.outputName" alias="on"
 	 * @description Uses this as the base name of the results folder
 	 */
@@ -181,16 +175,15 @@ public class GatlingMojo extends AbstractMojo {
 
 	/**
 	 * Propagates System properties in fork mode to forked process
-	 * 
-	 * @parameter property="gatling.propagateSystemProperties"
-	 *            default-value="true"
+	 *
+	 * @parameter property="gatling.propagateSystemProperties" default-value="true"
 	 * @description Propagates System properties in fork mode to forked process
 	 */
 	private boolean propagateSystemProperties;
 
 	/**
 	 * Disable the plugin
-	 * 
+	 *
 	 * @parameter property="gatling.skip" default-value="false"
 	 * @description Disable the plugin
 	 */
@@ -198,7 +191,7 @@ public class GatlingMojo extends AbstractMojo {
 
 	/**
 	 * The Maven Project
-	 * 
+	 *
 	 * @parameter property="project"
 	 * @required
 	 * @readonly
@@ -207,7 +200,7 @@ public class GatlingMojo extends AbstractMojo {
 
 	/**
 	 * The Maven Session Object
-	 * 
+	 *
 	 * @parameter property="session"
 	 * @required
 	 * @readonly
@@ -216,7 +209,7 @@ public class GatlingMojo extends AbstractMojo {
 
 	/**
 	 * The toolchain manager to use.
-	 * 
+	 *
 	 * @component
 	 * @required
 	 * @readonly
@@ -253,15 +246,15 @@ public class GatlingMojo extends AbstractMojo {
 			try {
 				caller.run(false);
 			} catch (ExecuteException e) {
-				if (e.getExitValue() == GatlingStatusCodes.assertionsFailed())
+				if (e.getExitValue() == GatlingStatusCodes.AssertionsFailed())
 					throw new GatlingSimulationAssertionsFailedException(e);
-				else 
+				else
 					throw e; /* issue 1482*/
 			}
 		} else {
 			GatlingJavaMainCallerInProcess caller = new GatlingJavaMainCallerInProcess(this, GATLING_MAIN_CLASS, testClasspath, gatlingArgs);
 			int returnCode = caller.run();
-			if (returnCode == GatlingStatusCodes.assertionsFailed())
+			if (returnCode == GatlingStatusCodes.AssertionsFailed())
 				throw new GatlingSimulationAssertionsFailedException();
 		}
 	}
@@ -279,7 +272,7 @@ public class GatlingMojo extends AbstractMojo {
 	}
 
 	private List<String> jvmArgs() {
-		return jvmArgs != null ? jvmArgs : Arrays.asList(JVM_ARGS);
+		return jvmArgs != null ? jvmArgs : asList(JVM_ARGS);
 	}
 
 	private List<String> gatlingArgs() throws Exception {
@@ -302,22 +295,22 @@ public class GatlingMojo extends AbstractMojo {
 
 		// Arguments
 		List<String> args = new ArrayList<String>();
-		args.addAll(asList("-" + CommandLineConstants.DATA_FOLDER_SHORT(), dataFolder.getCanonicalPath(),//
-		        "-" + CommandLineConstants.RESULTS_FOLDER_SHORT(), resultsFolder.getCanonicalPath(),// ;
-		        "-" + CommandLineConstants.REQUEST_BODIES_FOLDER_SHORT(), requestBodiesFolder.getCanonicalPath(),//
-		        "-" + CommandLineConstants.SIMULATIONS_FOLDER_SHORT(), simulationsFolder.getCanonicalPath(),//
-		        "-" + CommandLineConstants.SIMULATION_SHORT(), simulationClass));
+		args.addAll(asList('-' + CommandLineConstants.short$.MODULE$.DataFolder(), dataFolder.getCanonicalPath(),//
+		                   '-' + CommandLineConstants.short$.MODULE$.ResultsFolder(), resultsFolder.getCanonicalPath(),// ;
+		                   '-' + CommandLineConstants.short$.MODULE$.RequestBodiesFolder(), requestBodiesFolder.getCanonicalPath(),//
+		                   '-' + CommandLineConstants.short$.MODULE$.SimulationsFolder(), simulationsFolder.getCanonicalPath(),//
+		                   '-' + CommandLineConstants.short$.MODULE$.Simulation(), simulationClass));
 
 		if (noReports) {
-			args.add("-" + CommandLineConstants.NO_REPORTS_SHORT());
+			args.add("--" + CommandLineConstants.short$.MODULE$.NoReports());
 		}
 
 		if (reportsOnly != null) {
-			args.addAll(asList("-" + CommandLineConstants.REPORTS_ONLY_SHORT(), reportsOnly));
+			args.addAll(asList("--" + CommandLineConstants.short$.MODULE$.ReportsOnly(), reportsOnly));
 		}
 
 		if (outputDirectoryBaseName != null) {
-			args.addAll(asList("-" + CommandLineConstants.OUTPUT_DIRECTORY_BASE_NAME_SHORT(), outputDirectoryBaseName));
+			args.addAll(asList("--" + CommandLineConstants.short$.MODULE$.OutputDirectoryBaseName(), outputDirectoryBaseName));
 		}
 
 		return args;
@@ -335,7 +328,7 @@ public class GatlingMojo extends AbstractMojo {
 	/**
 	 * Resolve simulation files to execute from the simulation folder and
 	 * includes/excludes.
-	 * 
+	 *
 	 * @return a comma separated String of simulation class names.
 	 */
 	private List<String> resolveSimulations(File simulationsFolder, List<String> includes, List<String> excludes) {
