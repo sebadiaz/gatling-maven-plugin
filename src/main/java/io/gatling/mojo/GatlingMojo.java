@@ -49,7 +49,7 @@ import scala_maven_executions.MainWithArgsInFile;
  */
 public class GatlingMojo extends AbstractMojo {
 
-	public static final String[] DEFAULT_INCLUDES = {"**/*.scala"};
+	public static final String[] SCALA_INCLUDES = {"**/*.scala"};
 	public static final String GATLING_MAIN_CLASS = "io.gatling.app.Gatling";
 
 	public static final String[] JVM_ARGS = new String[]{"-server", "-XX:+UseThreadPriorities", "-XX:ThreadPriorityPolicy=42", "-Xms512M", "-Xmx512M", "-Xmn100M", "-Xss2M",
@@ -88,24 +88,6 @@ public class GatlingMojo extends AbstractMojo {
 	 * @description Uses this folder to discover simulations that could be run
 	 */
 	private File simulationsFolder;
-
-	/**
-	 * Sets the list of include patterns to use in directory scan for
-	 * simulations. Relative to simulationsFolder.
-	 *
-	 * @parameter
-	 * @description Include patterns to use in directory scan for simulations
-	 */
-	private List<String> includes;
-
-	/**
-	 * Sets the list of exclude patterns to use in directory scan for
-	 * simulations. Relative to simulationsFolder.
-	 *
-	 * @parameter
-	 * @description Exclude patterns to use in directory scan for simulations
-	 */
-	private List<String> excludes;
 
 	/**
 	 * A name of a Simulation class to run. This takes precedence over the
@@ -278,7 +260,7 @@ public class GatlingMojo extends AbstractMojo {
 	private List<String> gatlingArgs() throws Exception {
 		// Solves the simulations, if no simulation file is defined
 		if (simulationClass == null) {
-			List<String> simulations = resolveSimulations(simulationsFolder, includes, excludes);
+			List<String> simulations = resolveSimulations(simulationsFolder);
 
 			if (simulations.isEmpty()) {
 				getLog().error("No simulations to run");
@@ -331,7 +313,7 @@ public class GatlingMojo extends AbstractMojo {
 	 *
 	 * @return a comma separated String of simulation class names.
 	 */
-	private List<String> resolveSimulations(File simulationsFolder, List<String> includes, List<String> excludes) {
+	private List<String> resolveSimulations(File simulationsFolder) {
 		DirectoryScanner scanner = new DirectoryScanner();
 
 		// Set Base Directory
@@ -339,16 +321,7 @@ public class GatlingMojo extends AbstractMojo {
 		scanner.setBasedir(simulationsFolder);
 
 		// Resolve includes
-		if (includes != null && !includes.isEmpty()) {
-			scanner.setIncludes(includes.toArray(new String[includes.size()]));
-		} else {
-			scanner.setIncludes(DEFAULT_INCLUDES);
-		}
-
-		// Resolve excludes
-		if (excludes != null && !excludes.isEmpty()) {
-			scanner.setExcludes(excludes.toArray(new String[excludes.size()]));
-		}
+	  scanner.setIncludes(SCALA_INCLUDES);
 
 		// Resolve simulations to execute
 		scanner.scan();
