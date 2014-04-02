@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * 		http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -36,57 +36,56 @@ import scala_maven_executions.JavaMainCallerInProcess;
  */
 public class GatlingJavaMainCallerInProcess extends JavaMainCallerInProcess {
 
-	private String oldClassPath;
+  private String oldClassPath;
 
-	public GatlingJavaMainCallerInProcess(AbstractMojo requester, String mainClassName, String classpath, String[] args) throws Exception {
-		super(requester, mainClassName, classpath, null, args);
+  public GatlingJavaMainCallerInProcess(AbstractMojo requester, String mainClassName, String classpath, String[] args) throws Exception {
+    super(requester, mainClassName, classpath, null, args);
 
-		// Pull out classpath and create class loader
-		ArrayList<URL> urls = new ArrayList<URL>();
-		for (String path : classpath.split(File.pathSeparator)) {
-			try {
-				urls.add(new File(path).toURI().toURL());
-			} catch (MalformedURLException e) {
-				requester.getLog().error(e);
-			}
-		}
+    // Pull out classpath and create class loader
+    ArrayList<URL> urls = new ArrayList<URL>();
+    for (String path : classpath.split(File.pathSeparator)) {
+      try {
+        urls.add(new File(path).toURI().toURL());
+      } catch (MalformedURLException e) {
+        requester.getLog().error(e);
+      }
+    }
 
-		// substitute classpath system prop
-		oldClassPath = System.getProperty("java.class.path");
-		System.setProperty("java.class.path", classpath);
+    // substitute classpath system prop
+    oldClassPath = System.getProperty("java.class.path");
+    System.setProperty("java.class.path", classpath);
 
-		// FIXME why not child of current classloader?
-		// FIXME what about old classloader?
-		Thread.currentThread().setContextClassLoader(new URLClassLoader(urls.toArray(new URL[urls.size()])));
-	}
+    // FIXME why not child of current classloader?
+    // FIXME what about old classloader?
+    Thread.currentThread().setContextClassLoader(new URLClassLoader(urls.toArray(new URL[urls.size()])));
+  }
 
-	@Override
-	// In process, ignore jvm args
-	public void addJvmArgs(String... args) {
-	}
+  @Override
+  // In process, ignore jvm args
+  public void addJvmArgs(String... args) {
+  }
 
-	@Override
-	// Not used, @see #run()
-	public boolean run(boolean displayCmd, boolean throwFailure) throws Exception {
-		throw new UnsupportedOperationException("boolean run(boolean displayCmd, boolean throwFailure) is not supported, call int run() instead");
-	}
+  @Override
+  // Not used, @see #run()
+  public boolean run(boolean displayCmd, boolean throwFailure) throws Exception {
+    throw new UnsupportedOperationException("boolean run(boolean displayCmd, boolean throwFailure) is not supported, call int run() instead");
+  }
 
-	public int run() throws Exception {
-		return runGatling(mainClassName, args);
-	}
+  public int run() throws Exception {
+    return runGatling(mainClassName, args);
+  }
 
-	private int runGatling(String mainClassName, List<String> args) throws Exception {
-		ClassLoader cl = Thread.currentThread().getContextClassLoader();
-		Class<?> mainClass = cl.loadClass(mainClassName);
-		Method runGatlingMethod = mainClass.getMethod("runGatling", String[].class);
-		String[] argArray = args.toArray(new String[args.size()]);
-		Integer ret = (Integer) runGatlingMethod.invoke(null, new Object[] { argArray });
+  private int runGatling(String mainClassName, List<String> args) throws Exception {
+    ClassLoader cl = Thread.currentThread().getContextClassLoader();
+    Class<?> mainClass = cl.loadClass(mainClassName);
+    Method runGatlingMethod = mainClass.getMethod("runGatling", String[].class);
+    String[] argArray = args.toArray(new String[args.size()]);
+    Integer ret = (Integer) runGatlingMethod.invoke(null, new Object[]{argArray});
 
-		// restore previous classpath system prop
-		System.setProperty("java.class.path", oldClassPath);
-		oldClassPath = null;
+    // restore previous classpath system prop
+    System.setProperty("java.class.path", oldClassPath);
+    oldClassPath = null;
 
-		return ret;
-	}
-
+    return ret;
+  }
 }
