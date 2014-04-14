@@ -9,4 +9,4 @@ env:
 
 # Publish to Sonatype if building master
 after_success:
-  - "[[ $TRAVIS_BRANCH == \"master\" ]] && mvn deploy"
+  - "[[ $TRAVIS_BRANCH == \"master\" ]] && [[ $TRAVIS_PULL_REQUEST == \"false\" ]] && mvn deploy"
