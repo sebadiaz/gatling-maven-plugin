@@ -38,11 +38,6 @@
 			<name>Stephane Landelle</name>
 			<organization>eBusiness Information, Excilys Group</organization>
 		</developer>
-		<developer>
-			<id>rsertelon@excilys.com</id>
-			<name>Romain Sertelon</name>
-			<organization>eBusiness Information, Excilys Group</organization>
-		</developer>
 	</developers>
 
 	<properties>
@@ -55,11 +50,6 @@
 		<junit.version>4.11</junit.version>
 		<maven3.version>3.0</maven3.version>
 		<scala-maven-plugin.version>3.1.6</scala-maven-plugin.version>
-		<maven-compiler-plugin.version>3.1</maven-compiler-plugin.version>
-		<maven-source-plugin.version>2.2.1</maven-source-plugin.version>
-		<maven-surefire-plugin.version>2.14.1</maven-surefire-plugin.version>
-		<maven-release-plugin.version>2.3.2</maven-release-plugin.version>
-		<maven-plugin-plugin.version>3.2</maven-plugin-plugin.version>
 		<build-helper-maven-plugin.version>1.7</build-helper-maven-plugin.version>
 		<maven-license-plugin.version>1.10.b1</maven-license-plugin.version>
 	</properties>
@@ -162,12 +152,7 @@
 		<pluginManagement>
 			<plugins>
 				<plugin>
-					<artifactId>maven-compiler-plugin</artifactId>
-					<version>${maven-compiler-plugin.version}</version>
-				</plugin>
-				<plugin>
 					<artifactId>maven-source-plugin</artifactId>
-					<version>${maven-source-plugin.version}</version>
 					<executions>
 						<execution>
 							<id>attach-sources</id>
@@ -178,21 +163,11 @@
 					</executions>
 				</plugin>
 				<plugin>
-					<artifactId>maven-surefire-plugin</artifactId>
-					<version>${maven-surefire-plugin.version}</version>
-				</plugin>
-				<plugin>
 					<artifactId>maven-release-plugin</artifactId>
-					<version>${maven-release-plugin.version}</version>
 					<configuration>
 						<autoVersionSubmodules>true</autoVersionSubmodules>
 						<tagNameFormat>@{project.version}</tagNameFormat>
 					</configuration>
-				</plugin>
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-plugin-plugin</artifactId>
-					<version>${maven-plugin-plugin.version}</version>
 				</plugin>
 				<plugin>
 					<groupId>org.codehaus.mojo</groupId>
@@ -253,10 +228,6 @@
 		</pluginManagement>
 		<plugins>
 			<plugin>
-				<artifactId>maven-source-plugin</artifactId>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-plugin-plugin</artifactId>
 				<executions>
 					<execution>
@@ -287,9 +258,6 @@
 						</configuration>
 					</execution>
 				</executions>
-			</plugin>
-			<plugin>
-				<artifactId>maven-release-plugin</artifactId>
 			</plugin>
 			<plugin>
 				<groupId>com.mycila.maven-license-plugin</groupId>
