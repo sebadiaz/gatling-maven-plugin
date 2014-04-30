@@ -277,22 +277,22 @@ public class GatlingMojo extends AbstractMojo {
 
     // Arguments
     List<String> args = new ArrayList<String>();
-    args.addAll(asList('-' + CommandLineConstants.short$.MODULE$.DataFolder(), dataFolder.getCanonicalPath(),//
-      '-' + CommandLineConstants.short$.MODULE$.ResultsFolder(), resultsFolder.getCanonicalPath(),// ;
-      '-' + CommandLineConstants.short$.MODULE$.RequestBodiesFolder(), requestBodiesFolder.getCanonicalPath(),//
-      '-' + CommandLineConstants.short$.MODULE$.SimulationsFolder(), simulationsFolder.getCanonicalPath(),//
-      '-' + CommandLineConstants.short$.MODULE$.Simulation(), simulationClass));
+    args.addAll(asList('-' + CommandLineConstants.DataFolder()._short(), dataFolder.getCanonicalPath(),//
+      '-' + CommandLineConstants.ResultsFolder()._short(), resultsFolder.getCanonicalPath(),// ;
+      '-' + CommandLineConstants.RequestBodiesFolder()._short(), requestBodiesFolder.getCanonicalPath(),//
+      '-' + CommandLineConstants.SimulationsFolder()._short(), simulationsFolder.getCanonicalPath(),//
+      '-' + CommandLineConstants.Simulation()._short(), simulationClass));
 
     if (noReports) {
-      args.add("--" + CommandLineConstants.short$.MODULE$.NoReports());
+      args.add("--" + CommandLineConstants.NoReports()._short());
     }
 
     if (reportsOnly != null) {
-      args.addAll(asList("--" + CommandLineConstants.short$.MODULE$.ReportsOnly(), reportsOnly));
+      args.addAll(asList("--" + CommandLineConstants.ReportsOnly()._short(), reportsOnly));
     }
 
     if (outputDirectoryBaseName != null) {
-      args.addAll(asList("--" + CommandLineConstants.short$.MODULE$.OutputDirectoryBaseName(), outputDirectoryBaseName));
+      args.addAll(asList("--" + CommandLineConstants.OutputDirectoryBaseName()._short(), outputDirectoryBaseName));
     }
 
     return args;
