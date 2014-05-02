@@ -52,10 +52,9 @@ public class GatlingMojo extends AbstractMojo {
   public static final String[] SCALA_INCLUDES = {"**/*.scala"};
   public static final String GATLING_MAIN_CLASS = "io.gatling.app.Gatling";
 
-  public static final String[] JVM_ARGS = new String[]{"-server", "-XX:+UseThreadPriorities", "-XX:ThreadPriorityPolicy=42", "-Xms512M", "-Xmx512M", "-Xmn100M", "-Xss2M",
+  public static final String[] JVM_ARGS = new String[]{"-server", "-XX:+UseThreadPriorities", "-XX:ThreadPriorityPolicy=42", "-Xms512M", "-Xmx512M", "-Xmn100M",
     "-XX:+HeapDumpOnOutOfMemoryError", "-XX:+AggressiveOpts", "-XX:+OptimizeStringConcat", "-XX:+UseFastAccessorMethods", "-XX:+UseParNewGC", "-XX:+UseConcMarkSweepGC",
-    "-XX:+CMSParallelRemarkEnabled", "-XX:+CMSClassUnloadingEnabled", "-XX:CMSInitiatingOccupancyFraction=75", "-XX:+UseCMSInitiatingOccupancyOnly", "-XX:SurvivorRatio=8",
-    "-XX:MaxTenuringThreshold=1"};
+    "-XX:+CMSParallelRemarkEnabled"};
 
   /**
    * Runs simulation but does not generate reports. By default false.
