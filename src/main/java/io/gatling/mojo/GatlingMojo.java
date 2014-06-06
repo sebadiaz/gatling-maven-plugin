@@ -283,11 +283,11 @@ public class GatlingMojo extends AbstractMojo {
       '-' + CommandLineConstants.Simulation().abbr(), simulationClass));
 
     if (noReports) {
-      args.add("--" + CommandLineConstants.NoReports().abbr());
+      args.add("-" + CommandLineConstants.NoReports().abbr());
     }
 
     if (reportsOnly != null) {
-      args.addAll(asList("--" + CommandLineConstants.ReportsOnly().abbr(), reportsOnly));
+      args.addAll(asList("-" + CommandLineConstants.ReportsOnly().abbr(), reportsOnly));
     }
 
     if (outputDirectoryBaseName != null) {
