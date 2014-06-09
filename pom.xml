@@ -59,9 +59,14 @@
 			<dependency>
 				<groupId>io.gatling</groupId>
 				<artifactId>gatling-app</artifactId>
-				<version>${gatling.version}</version>
+                <version>${gatling.version}</version>
 			</dependency>
-			<dependency>
+            <dependency>
+                <groupId>io.gatling</groupId>
+                <artifactId>gatling-recorder</artifactId>
+                <version>${gatling.version}</version>
+            </dependency>
+            <dependency>
 				<groupId>org.apache.commons</groupId>
 				<artifactId>commons-exec</artifactId>
 				<version>${commons-exec.version}</version>
@@ -90,7 +95,12 @@
 			<groupId>io.gatling</groupId>
 			<artifactId>gatling-app</artifactId>
 		</dependency>
-		<dependency>
+        <dependency>
+            <groupId>io.gatling</groupId>
+            <artifactId>gatling-recorder</artifactId>
+        </dependency>
+
+        <dependency>
 			<groupId>org.apache.commons</groupId>
 			<artifactId>commons-exec</artifactId>
 		</dependency>
