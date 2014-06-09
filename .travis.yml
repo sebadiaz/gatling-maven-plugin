@@ -4,8 +4,8 @@ script: mvn test
 
 env:
   global:
-    - secure: "O6aIqekazY38VipjHK0hBjaiK9A5VoXCNQNykudpdCceNauOBy8C8c7PvMtPiaqk1RLrfiIQI2AYEv6ERgSf6dLX32FcGufLomxBooBvtLSh8zwz/Ip8/iIseCsaVnF6Ds9RX/ThQziSDTWoX+pGsKFsQKKjXzZ98U/6/eL2Akc="
-    - secure: "ZQ9dMQhVu0JOreIZby+nMjwOPlK9MuhvSOBcYqH0WtL4GWezso4XqqV3RH6oDr/HaoG/G/V811gbR4yn5RUipIyPIQiJ6/CV168IARj08XiZDMddNcprd5TJb0OGZI4KsJtOxAOleVwlwdJBj0ZVcWmqfodKnL4wn6oOWyH1tNg="
+    - secure: "j7DO+DWE9vwRmbtSuSOIHZq0VLTnraXw+8Shl3o2Zrxts7UE4I1TuR7Jxq3RN632Dl4vKu78jv2FgJMTTBIgdegmvnTVXCm4uQHHnNXh+0wB1KlpkFz3BN5gBKOOcy6ZfrxTqRlAOdT/Ym61oELceAUiUyBwDriiNy6tQRun4Gg="
+    - secure: "bIyJDObVqSLcW1wXn1KEqxPwtvOXQZfyp+soQnRA/rSgEJopCfSVY4kEXuEWQ5VODA4DUmn17+ItXeFWxYZQWI10p6OfF6ZQ9SHrrbdN5/AUYv0A3fjhsg9G+YQwPbiqNHOyV4azsaiUG7TPsYJZRG/ThvT99T5CqaKGfc/fsQQ="
 
 # Publish to Sonatype if building master
 after_success:
