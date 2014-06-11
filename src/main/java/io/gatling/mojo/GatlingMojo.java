@@ -15,125 +15,106 @@
  */
 package io.gatling.mojo;
 
-import static java.util.Arrays.asList;
-import static org.codehaus.plexus.util.StringUtils.trim;
-
-import io.gatling.app.CommandLineConstants;
-import io.gatling.app.GatlingStatusCodes;
-
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.gatling.app.CommandLineConstants;
+import io.gatling.app.GatlingStatusCodes;
 import org.apache.commons.exec.ExecuteException;
 import org.apache.maven.execution.MavenSession;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
+import org.apache.maven.plugins.annotations.Component;
+import org.apache.maven.plugins.annotations.LifecyclePhase;
+import org.apache.maven.plugins.annotations.Mojo;
+import org.apache.maven.plugins.annotations.Parameter;
+import org.apache.maven.plugins.annotations.ResolutionScope;
 import org.apache.maven.project.MavenProject;
 import org.apache.maven.toolchain.Toolchain;
 import org.apache.maven.toolchain.ToolchainManager;
 import org.codehaus.plexus.util.DirectoryScanner;
-
 import scala_maven_executions.JavaMainCaller;
 import scala_maven_executions.MainHelper;
 import scala_maven_executions.MainWithArgsInFile;
 
+import static java.util.Arrays.asList;
+import static org.codehaus.plexus.util.StringUtils.trim;
+
 /**
  * Mojo to execute Gatling.
- *
- * @goal execute
- * @phase integration-test
- * @description Gatling Maven Plugin
- * @requiresDependencyResolution test
  */
+@Mojo(name = "execute", defaultPhase = LifecyclePhase.INTEGRATION_TEST, requiresDependencyResolution = ResolutionScope.TEST)
 public class GatlingMojo extends AbstractMojo {
 
   public static final String[] SCALA_INCLUDES = {"**/*.scala"};
   public static final String GATLING_MAIN_CLASS = "io.gatling.app.Gatling";
 
-  public static final String[] JVM_ARGS = new String[]{"-server", "-XX:+UseThreadPriorities", "-XX:ThreadPriorityPolicy=42", "-Xms512M", "-Xmx512M", "-Xmn100M",
-    "-XX:+HeapDumpOnOutOfMemoryError", "-XX:+AggressiveOpts", "-XX:+OptimizeStringConcat", "-XX:+UseFastAccessorMethods", "-XX:+UseParNewGC", "-XX:+UseConcMarkSweepGC",
-    "-XX:+CMSParallelRemarkEnabled"};
+  public static final String[] JVM_ARGS = new String[]{
+          "-server", "-XX:+UseThreadPriorities", "-XX:ThreadPriorityPolicy=42", "-Xms512M",
+          "-Xmx512M", "-Xmn100M", "-XX:+HeapDumpOnOutOfMemoryError", "-XX:+AggressiveOpts",
+          "-XX:+OptimizeStringConcat", "-XX:+UseFastAccessorMethods", "-XX:+UseParNewGC",
+          "-XX:+UseConcMarkSweepGC", "-XX:+CMSParallelRemarkEnabled"};
 
   /**
-   * Runs simulation but does not generate reports. By default false.
-   *
-   * @parameter property="gatling.noReports" alias="nr" default-value="false"
-   * @description Runs simulation but does not generate reports
+   * Run simulation but does not generate reports. By default false.
    */
+  @Parameter(property = "gatling.noReports", alias = "nr", defaultValue = "false")
   private boolean noReports;
 
-    /**
-     * Generates the reports for the simulation in this folder.
-     *
-     * @parameter property="gatling.reportsOnly" alias="ro"
-     * @description Generates the reports for the simulation in this folder
-     */
-    private String reportsOnly;
+  /**
+   * Generate the reports for the simulation in this folder.
+   */
+  @Parameter(property = "gatling.reportsOnly", alias = "ro")
+  private String reportsOnly;
 
   /**
-   * Uses this file as the configuration file.
-   *
-   * @parameter property="gatling.configDir" alias="cd" default-value="${basedir}/src/test/resources"
-   * @description Uses this file as the configuration directory
+   * Use this folder as the configuration directory.
    */
-  private File configDir;
+  @Parameter(property = "gatling.configFolder", alias = "cd", defaultValue = "${basedir}/src/test/resources")
+  private File configFolder;
 
   /**
-   * Uses this folder to discover simulations that could be run
-   *
-   * @parameter property="gatling.simulationsFolder" alias="sf" default-value="${basedir}/src/test/scala"
-   * @description Uses this folder to discover simulations that could be run
+   * Use this folder to discover simulations that could be run.
    */
+  @Parameter(property = "gatling.simulationsFolder", alias = "sf", defaultValue = "${basedir}/src/test/scala")
   private File simulationsFolder;
 
   /**
-   * A name of a Simulation class to run. This takes precedence over the
-   * includes / excludes parameters.
-   *
-   * @parameter property="gatling.simulationClass" alias="sc"
-   * @description The name of the Simulation class to run
+   * A name of a Simulation class to run. This takes precedence over the includes / excludes parameters.
    */
+  @Parameter(property = "gatling.simulationClass", alias = "sc")
   private String simulationClass;
 
   /**
-   * Uses this folder as the folder where feeders are stored
-   *
-   * @parameter property="gatling.dataFolder" alias="df" default-value="${basedir}/src/test/resources/data"
-   * @description Uses this folder as the folder where feeders are stored
+   * Use this folder as the folder where feeders are stored.
    */
+  @Parameter(property = "gatling.dataFolder", alias = "df", defaultValue = "${basedir}/src/test/resources/data")
   private File dataFolder;
 
   /**
-   * Uses this folder as the folder where request bodies are stored
-   *
-   * @parameter property="gatling.requestBodiesFolder" alias="bf" default-value="${basedir}/src/test/resources/request-bodies"
-   * @description Uses this folder as the folder where request bodies are stored
+   * Use this folder as the folder where request bodies are stored.
    */
+  @Parameter(property = "gatling.requestBodiesFolder", alias = "bf", defaultValue = "${basedir}/src/test/resources/request-bodies")
   private File requestBodiesFolder;
 
   /**
-   * Uses this folder as the folder where results are stored
-   *
-   * @parameter property="gatling.resultsFolder" alias="rf" default-value="${basedir}/target/gatling/results"
-   * @description Uses this folder as the folder where results are stored
+   * Use this folder as the folder where results are stored.
    */
+  @Parameter(property = "gatling.resultsFolder", alias = "rf", defaultValue = "${basedir}/target/gatling/results")
   private File resultsFolder;
 
   /**
    * Extra JVM arguments to pass when running Gatling.
-   *
-   * @parameter
    */
+  @Parameter(property = "gatling.jvmArgs")
   private List<String> jvmArgs;
 
   /**
-   * Forks the execution of Gatling plugin into a separate JVM.
-   *
-   * @parameter property="gatling.fork" default-value="true"
-   * @description Forks the execution of Gatling plugin into a separate JVM
+   * Fork the execution of Gatling plugin into a separate JVM.
    */
+  @Parameter(property = "gatling.fork", defaultValue = "true")
   private boolean fork;
 
   /**
@@ -141,60 +122,44 @@ public class GatlingMojo extends AbstractMojo {
    * if there are Gatling test failures. This can be useful on a continuous
    * integration server, if your only option to be able to collect output
    * files, is if the project builds successfully.
-   *
-   * @parameter property="gatling.failOnError" default-value="true"
    */
+  @Parameter(property = "gatling.failOnError", defaultValue = "true")
   private boolean failOnError;
 
   /**
-   * Force the name of the directory generated for the results of the run
-   *
-   * @parameter property="gatling.outputName" alias="on"
-   * @description Uses this as the base name of the results folder
+   * Force the name of the directory generated for the results of the run.
    */
+  @Parameter(property = "gatling.outputName", alias = "on")
   private String outputDirectoryBaseName;
 
   /**
-   * Propagates System properties in fork mode to forked process
-   *
-   * @parameter property="gatling.propagateSystemProperties" default-value="true"
-   * @description Propagates System properties in fork mode to forked process
+   * Propagate System properties in fork mode to forked process.
    */
+  @Parameter(property = "gatling.propagateSystemProperties", defaultValue = "true")
   private boolean propagateSystemProperties;
 
   /**
-   * Disable the plugin
-   *
-   * @parameter property="gatling.skip" default-value="false"
-   * @description Disable the plugin
+   * Disable the plugin.
    */
+  @Parameter(property = "gatling.skip", defaultValue = "false")
   private boolean skip;
 
   /**
-   * The Maven Project
-   *
-   * @parameter property="project"
-   * @required
-   * @readonly
+   * The Maven Project.
    */
+  @Component
   private MavenProject mavenProject;
 
   /**
-   * The Maven Session Object
-   *
-   * @parameter property="session"
-   * @required
-   * @readonly
+   * The Maven Session Object.
    */
+  @Component
   private MavenSession session;
 
   /**
    * The toolchain manager to use.
-   *
-   * @component
-   * @required
-   * @readonly
    */
+  @Component
   private ToolchainManager toolchainManager;
 
   /**
@@ -206,7 +171,7 @@ public class GatlingMojo extends AbstractMojo {
       // Create results directories
       resultsFolder.mkdirs();
       try {
-        executeGatling(jvmArgs().toArray(new String[0]), gatlingArgs().toArray(new String[0]));
+        executeGatling(jvmArgs().toArray(new String[jvmArgs.size()]), gatlingArgs().toArray(new String[jvmArgs.size()]));
       } catch (Exception e) {
         if (failOnError) {
           throw new MojoExecutionException("Gatling failed.", e);
@@ -242,8 +207,8 @@ public class GatlingMojo extends AbstractMojo {
 
   private String buildTestClasspath() throws Exception {
     @SuppressWarnings("unchecked")
-    List<String> testClasspathElements = (List<String>) mavenProject.getTestClasspathElements();
-    testClasspathElements.add(configDir.getPath());
+    List<String> testClasspathElements = mavenProject.getTestClasspathElements();
+    testClasspathElements.add(configFolder.getPath());
     // Find plugin jar and add it to classpath
     testClasspathElements.add(MainHelper.locateJar(GatlingMojo.class));
     // Jenkins seems to need scala-maven-plugin in the test classpath in
@@ -277,10 +242,10 @@ public class GatlingMojo extends AbstractMojo {
     // Arguments
     List<String> args = new ArrayList<String>();
     args.addAll(asList('-' + CommandLineConstants.DataFolder().abbr(), dataFolder.getCanonicalPath(),//
-      '-' + CommandLineConstants.ResultsFolder().abbr(), resultsFolder.getCanonicalPath(),// ;
-      '-' + CommandLineConstants.RequestBodiesFolder().abbr(), requestBodiesFolder.getCanonicalPath(),//
-      '-' + CommandLineConstants.SimulationsFolder().abbr(), simulationsFolder.getCanonicalPath(),//
-      '-' + CommandLineConstants.Simulation().abbr(), simulationClass));
+                       '-' + CommandLineConstants.ResultsFolder().abbr(), resultsFolder.getCanonicalPath(),// ;
+                       '-' + CommandLineConstants.RequestBodiesFolder().abbr(), requestBodiesFolder.getCanonicalPath(),//
+                       '-' + CommandLineConstants.SimulationsFolder().abbr(), simulationsFolder.getCanonicalPath(),//
+                       '-' + CommandLineConstants.Simulation().abbr(), simulationClass));
 
     if (noReports) {
       args.add("-" + CommandLineConstants.NoReports().abbr());
