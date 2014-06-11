@@ -98,7 +98,7 @@ public class RecorderMojo extends AbstractMojo {
     /**
      * Package.
      *
-     * @parameter property="gatling.recorder.package"
+     * @parameter property="gatling.recorder.package" default-value="${project.groupId}"
      * @description Sets the package of the generated class
      */
     private String packageName;
