@@ -29,39 +29,39 @@ import static org.junit.Assert.assertEquals;
 @RunWith(value = Parameterized.class)
 public class GatlingMojoFileNameConversionTest {
 
-    private static final String SEP = File.separator;
-    private String className;
-    private String fileName;
+	private static final String SEP = File.separator;
+	private String className;
+	private String fileName;
 
-    public GatlingMojoFileNameConversionTest(String className, String fileName) {
-        this.className = className;
-        this.fileName = fileName;
-    }
+	public GatlingMojoFileNameConversionTest(String className, String fileName) {
+		this.className = className;
+		this.fileName = fileName;
+	}
 
-    @Parameterized.Parameters
-    public static Collection<Object[]> data() {
-        Object[][] data = new Object[][]{
-                {"MySimulation", "MySimulation.scala"}
-                , {"MySimulation", "MySimulation.customFileExtension"}
-                , {"45000Email", "45000Email.scala"}
-                , {"TestScala", "TestScala.scala"}
-                , {"test_a", "test_a.scala"}
-                , {"t123456", "t123456.scala"}
-                , {"A1", "A1.scala"}
-                , {"mypackage.MySimulation", "mypackage" + SEP + "MySimulation.scala"}
-                , {"my.deeply.nested.package.MySimulation",
-                    "my" + SEP + "deeply" + SEP + "nested" + SEP + "package" + SEP + "MySimulation.scala"}
-                , {"leading.whitespace.MySimulation",
-                    " \n\t " + "leading" + SEP + "whitespace" + SEP + "MySimulation.scala"}
-                , {"trailing.whitespace.MySimulation",
-                    "trailing" + SEP + "whitespace" + SEP + "MySimulation.scala" + " \n\t "}
-        };
-        return Arrays.asList(data);
-    }
+	@Parameterized.Parameters
+	public static Collection<Object[]> data() {
+		Object[][] data = new Object[][]{
+				{"MySimulation", "MySimulation.scala"}
+				, {"MySimulation", "MySimulation.customFileExtension"}
+				, {"45000Email", "45000Email.scala"}
+				, {"TestScala", "TestScala.scala"}
+				, {"test_a", "test_a.scala"}
+				, {"t123456", "t123456.scala"}
+				, {"A1", "A1.scala"}
+				, {"mypackage.MySimulation", "mypackage" + SEP + "MySimulation.scala"}
+				, {"my.deeply.nested.package.MySimulation",
+				"my" + SEP + "deeply" + SEP + "nested" + SEP + "package" + SEP + "MySimulation.scala"}
+				, {"leading.whitespace.MySimulation",
+				" \n\t " + "leading" + SEP + "whitespace" + SEP + "MySimulation.scala"}
+				, {"trailing.whitespace.MySimulation",
+				"trailing" + SEP + "whitespace" + SEP + "MySimulation.scala" + " \n\t "}
+		};
+		return Arrays.asList(data);
+	}
 
-    @Test
-    public void test_fileNametoClassName() {
-        assertEquals(className, fileNameToClassName(fileName));
-    }
+	@Test
+	public void test_fileNametoClassName() {
+		assertEquals(className, fileNameToClassName(fileName));
+	}
 
 }

@@ -32,69 +32,69 @@ import scala_maven_executions.JavaMainCallerByFork;
 
 public class GatlingJavaMainCallerByFork extends JavaMainCallerByFork {
 
-  public GatlingJavaMainCallerByFork(AbstractMojo requester1, String mainClassName1, String classpath, String[] jvmArgs1, String[] args1, boolean forceUseArgFile, Toolchain toolchain, boolean propagateSystemProperties) throws Exception {
-    super(requester1, mainClassName1, classpath, jvmArgs1, args1, forceUseArgFile, toolchain);
+	public GatlingJavaMainCallerByFork(AbstractMojo requester1, String mainClassName1, String classpath, String[] jvmArgs1, String[] args1, boolean forceUseArgFile, Toolchain toolchain, boolean propagateSystemProperties) throws Exception {
+		super(requester1, mainClassName1, classpath, jvmArgs1, args1, forceUseArgFile, toolchain);
 
-    if (propagateSystemProperties) {
-      for (Entry<Object, Object> systemProp : System.getProperties().entrySet()) {
-        String name = systemProp.getKey().toString();
-        String value = systemProp.getValue().toString();
-        if (isPropagatableProperty(name)) {
-          addJvmArgs("-D" + name + "=" + StringUtils.escape(value));
-        }
-      }
-    }
-  }
+		if (propagateSystemProperties) {
+			for (Entry<Object, Object> systemProp : System.getProperties().entrySet()) {
+				String name = systemProp.getKey().toString();
+				String value = systemProp.getValue().toString();
+				if (isPropagatableProperty(name)) {
+					addJvmArgs("-D" + name + "=" + StringUtils.escape(value));
+				}
+			}
+		}
+	}
 
-  @Override
-  public boolean run(boolean displayCmd, boolean throwFailure) throws Exception {
-    List<String> cmd = buildCommand();
-    displayCmd(displayCmd, cmd);
-    Executor exec = new DefaultExecutor();
+	@Override
+	public boolean run(boolean displayCmd, boolean throwFailure) throws Exception {
+		List<String> cmd = buildCommand();
+		displayCmd(displayCmd, cmd);
+		Executor exec = new DefaultExecutor();
 
-    // err and out are redirected to out
-    exec.setStreamHandler(new PumpStreamHandler(System.out, System.err, System.in));
+		// err and out are redirected to out
+		exec.setStreamHandler(new PumpStreamHandler(System.out, System.err, System.in));
 
-    exec.setProcessDestroyer(new ShutdownHookProcessDestroyer());
+		exec.setProcessDestroyer(new ShutdownHookProcessDestroyer());
 
-    CommandLine cl = new CommandLine(cmd.get(0));
-    for (int i = 1; i < cmd.size(); i++) {
-      cl.addArgument(cmd.get(i), false);
-    }
-    try {
-      int exitValue = exec.execute(cl);
-      if (exitValue != 0) {
-        if (throwFailure) {
-          throw new MojoFailureException("command line returned non-zero value:" + exitValue);
-        }
-        return false;
-      }
-      return true;
-    } catch (ExecuteException exc) {
-      if (throwFailure) {
-        throw exc;
-      }
-      return false;
-    }
-  }
+		CommandLine cl = new CommandLine(cmd.get(0));
+		for (int i = 1; i < cmd.size(); i++) {
+			cl.addArgument(cmd.get(i), false);
+		}
+		try {
+			int exitValue = exec.execute(cl);
+			if (exitValue != 0) {
+				if (throwFailure) {
+					throw new MojoFailureException("command line returned non-zero value:" + exitValue);
+				}
+				return false;
+			}
+			return true;
+		} catch (ExecuteException exc) {
+			if (throwFailure) {
+				throw exc;
+			}
+			return false;
+		}
+	}
 
-  public void displayCmd(boolean displayCmd, List<String> cmd) {
-    if (displayCmd) {
-      requester.getLog().info("cmd: " + " " + StringUtils.join(cmd.iterator(), " "));
-    } else if (requester.getLog().isDebugEnabled()) {
-      requester.getLog().debug("cmd: " + " " + StringUtils.join(cmd.iterator(), " "));
-    }
-  }
+	public void displayCmd(boolean displayCmd, List<String> cmd) {
+		if (displayCmd) {
+			requester.getLog().info("cmd: " + " " + StringUtils.join(cmd.iterator(), " "));
+		} else if (requester.getLog().isDebugEnabled()) {
+			requester.getLog().debug("cmd: " + " " + StringUtils.join(cmd.iterator(), " "));
+		}
+	}
 
-  private boolean isPropagatableProperty(String name) {
-    return !name.startsWith("java.") //
-      && !name.startsWith("sun.") //
-      && !name.startsWith("maven.") //
-      && !name.startsWith("file.") //
-      && !name.startsWith("awt.") //
-      && !name.startsWith("os.") //
-      && !name.startsWith("user.") //
-      && !name.equals("line.separator") //
-      && !name.equals("path.separator");
-  }
+	private boolean isPropagatableProperty(String name) {
+		return !name.startsWith("java.") //
+				&& !name.startsWith("sun.") //
+				&& !name.startsWith("maven.") //
+				&& !name.startsWith("file.") //
+				&& !name.startsWith("awt.") //
+				&& !name.startsWith("os.") //
+				&& !name.startsWith("user.") //
+				&& !name.equals("line.separator") //
+				&& !name.equals("path.separator");
+	}
 }
