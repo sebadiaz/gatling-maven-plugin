@@ -28,7 +28,6 @@ import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.toolchain.Toolchain;
 import org.codehaus.plexus.util.StringUtils;
-
 import scala_maven_executions.JavaMainCallerByFork;
 
 public class GatlingJavaMainCallerByFork extends JavaMainCallerByFork {

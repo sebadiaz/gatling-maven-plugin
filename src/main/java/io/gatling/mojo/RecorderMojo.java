@@ -15,135 +15,110 @@
  */
 package io.gatling.mojo;
 
-import io.gatling.recorder.GatlingRecorder;
+import javax.swing.*;
+
 import io.gatling.recorder.config.RecorderPropertiesBuilder;
 import io.gatling.recorder.controller.RecorderController;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
+import org.apache.maven.plugins.annotations.LifecyclePhase;
+import org.apache.maven.plugins.annotations.Mojo;
+import org.apache.maven.plugins.annotations.Parameter;
+import org.apache.maven.plugins.annotations.ResolutionScope;
 import scala.Option;
 import scala.io.Codec;
 import scala.reflect.io.File;
 
-import javax.swing.*;
-import java.util.Properties;
-
 /**
  * Mojo to run Gatling Recorder.
- *
- * @goal recorder
- * @phase integration-test
- * @description Gatling Recorder Plugin
- * @requiresDependencyResolution test
  */
+@Mojo(name = "recorder", defaultPhase = LifecyclePhase.INTEGRATION_TEST, requiresDependencyResolution = ResolutionScope.TEST)
 public class RecorderMojo extends AbstractMojo {
-    private static final String GATLING_HOME = "GATLING_HOME";
 
     /**
-     * Local recorder port.
-     *
-     * @parameter property="gatling.recorder.localPort" default-value="0"
-     * @description Local port used by Gatling Proxy for HTTP
+     * Local port used by Gatling Proxy for HTTP.
      */
-    private int localPort;
+    @Parameter(property = "gatling.recorder.localPort", alias = "lp")
+    private Integer localPort;
 
     /**
-     * Proxy host
-     *
-     * @parameter property="gatling.recorder.proxyHost"
-     * @description Outgoing proxy host
+     * Outgoing proxy host.
      */
+    @Parameter(property = "gatling.recorder.proxyHost", alias = "ph")
     private String proxyHost;
 
     /**
-     * Proxy port.
-     *
-     * @parameter property="gatling.recorder.proxyPort" default-value="0"
-     * @description Outgoing proxy port for HTTP
+     * Outgoing proxy port for HTTP.
      */
-    private int proxyPort;
+    @Parameter(property = "gatling.recorder.proxyPort", alias = "pp")
+    private Integer proxyPort;
 
     /**
-     * Proxy SSL port.
-     *
-     * @parameter property="gatling.recorder.proxySSLPort" default-value="0"
-     * @description Outgoing proxy port for HTTPS
+     * Outgoing proxy port for HTTPS.
      */
-    private int proxySSLPort;
+    @Parameter(property = "gatling.recorder.proxySslPort", alias = "pps")
+    private Integer proxySSLPort;
 
     /**
-     * Output folder.
-     *
-     * @parameter property="gatling.recorder.outputFolder" default-value="${basedir}/src/test/scala"
-     * @description Uses <folderName> as the folder where generated simulations will be stored
+     * Uses <folderName> as the folder where generated simulations will be stored.
      */
+    @Parameter(property = "gatling.recorder.outputFolder", alias = "of", defaultValue = "${basedir}/src/test/scala")
     private String outputFolder;
 
     /**
-     * Request bodies folder.
-     *
-     * @parameter property="gatling.recorder.requestBodiesFolder" default-value="${basedir}/src/test/resources/request-bodies"
-     * @description Uses <folderName> as the folder where request bodies are stored
+     * Uses <folderName> as the folder where request bodies are stored.
      */
+    @Parameter(property = "gatling.recorder.requestBodiesFolder", alias = "rbf", defaultValue = "${basedir}/src/test/resources/request-bodies")
     private String requestBodiesFolder;
 
     /**
-     * Class name.
-     *
-     * @parameter property="gatling.recorder.className"
-     * @description Sets the name of the generated class
+     * The name of the generated class.
      */
+    @Parameter(property = "gatling.recorder.className", alias = "cn")
     private String className;
 
     /**
-     * Package.
-     *
-     * @parameter property="gatling.recorder.package" default-value="${project.groupId}"
-     * @description Sets the package of the generated class
+     * The package of the generated class.
      */
+    @Parameter(property = "gatling.recorder.package", alias = "pkg", defaultValue = "${project.groupId}")
     private String packageName;
 
     /**
-     * Encoding.
-     *
-     * @parameter property="gatling.recorder.encoding"
-     * @description Sets the encoding used in the recorder
+     * The encoding used in the recorder.
      */
+    @Parameter(property = "gatling.recorder.encoding", alias = "enc")
     private String encoding;
 
     /**
-     * Follow redirect.
-     *
-     * @parameter property="gatling.recorder.followRedirect" default-value="false"
-     * @description Sets the follow redirect option
+     * The value of the "Follow Redirects" option.
      */
-    private boolean followRedirect;
+    @Parameter(property = "gatling.recorder.followRedirect", alias = "fr")
+    private Boolean followRedirect;
 
     /**
-     * Config file
-     *
-     * @parameter property="gatling.recorder.recorderConfigFile" default-value="${basedir}/recorder.conf"
-     * @description The config file to load recorder settings from
+     * The config file to load recorder settings from.
      */
+    @Parameter(property = "gatling.recorder.recorderConfigFile", defaultValue = "${basedir}/src/test/resources/recorder.conf")
     private String configFile;
 
     @Override
     public void execute() throws MojoExecutionException, MojoFailureException {
         RecorderPropertiesBuilder props = new RecorderPropertiesBuilder();
-        if (localPort != 0) props.localPort(localPort);
+        if (localPort != null) props.localPort(localPort);
         if (proxyHost != null) props.proxyHost(proxyHost);
-        if (proxyPort != 0) props.proxyPort(proxyPort);
-        if (proxySSLPort != 0) props.proxyPort(proxySSLPort);
+        if (proxyPort != null) props.proxyPort(proxyPort);
+        if (proxySSLPort != null) props.proxyPort(proxySSLPort);
         props.simulationOutputFolder(outputFolder);
         props.requestBodiesFolder(requestBodiesFolder);
         if (className != null) props.simulationClassName(className);
         if (packageName != null) props.simulationPackage(packageName);
         if (encoding != null) props.encoding(encoding);
-        if (followRedirect) props.followRedirect(followRedirect);
+        if (followRedirect != null) props.followRedirect(followRedirect);
         RecorderController.apply(props.build(), Option.apply(new File(new java.io.File(configFile), Codec.UTF8())));
         while (JFrame.getFrames().length > 0) {
             try {
-                Thread.sleep(100L);
+                Thread.sleep(1000L);
             } catch (InterruptedException ex) {
                 return;
             }
