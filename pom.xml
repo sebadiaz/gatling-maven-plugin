@@ -26,9 +26,9 @@
 	</licenses>
 
 	<scm>
-		<connection>scm:git:git:@github.com:excilys/gatling-maven-plugin.git</connection>
-		<developerConnection>scm:git:git:@github.com:excilys/gatling-maven-plugin.git</developerConnection>
-		<url>https://github.com/excilys/gatling-maven-plugin</url>
+		<connection>scm:git:git:@github.com:gatling/gatling-maven-plugin.git</connection>
+		<developerConnection>scm:git:git:@github.com:gatling/gatling-maven-plugin.git</developerConnection>
+		<url>https://github.com/gatling/gatling-maven-plugin</url>
 		<tag>HEAD</tag>
 	</scm>
 
