@@ -82,7 +82,7 @@ public class GatlingMojo extends AbstractMojo {
 	private File simulationsFolder;
 
 	/**
-	 * A name of a Simulation class to run. This takes precedence over the includes / excludes parameters.
+	 * A name of a Simulation class to run.
 	 */
 	@Parameter(property = "gatling.simulationClass", alias = "sc")
 	private String simulationClass;
@@ -272,8 +272,7 @@ public class GatlingMojo extends AbstractMojo {
 	}
 
 	/**
-	 * Resolve simulation files to execute from the simulation folder and
-	 * includes/excludes.
+	 * Resolve simulation files to execute from the simulation folder.
 	 *
 	 * @return a comma separated String of simulation class names.
 	 */
