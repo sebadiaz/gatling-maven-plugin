@@ -7,9 +7,8 @@ env:
     - secure: "gLpPkAfus0MtWenm/RNm94i6lZvLxpdA1s2tYVB67R08qJrskrk1cdvnsUPCBjOego5Z+vopRC8cSOH/YTu6E02iIc8xsnBxdtzTL2Hq7QMKilubCDqj3xHGurj7Vo+hgFWLjDPSiIYTCecjIUJ3Y7BZ2PTOzvyb/HGElh9g1tY="
     - secure: "L6Qp6A6mKzfx0csKkIFx5N/WdSf3P39OVsejhIk4fHi44zaQ64WxMqg0BBhjlpKFLNFMv3+n9fsA4wHcscy9P1rrKHDdyLPZ0L4Vgxx8vIzjOikc3IYV/DMAzoocK3eDNuDIpk44nz82HRLbHDIPH/q/W1M7OsAh3OqAikf6958="
 
-# Publish to Sonatype if building master
-after_success:
-  - "./check_master_or_tag.py && mvn deploy"
+# If building master, Publish to Sonatype
+after_success: "[[ $TRAVIS_PULL_REQUEST == \"false\" ]] && mvn deploy"
 
 # whitelist
 branches:
