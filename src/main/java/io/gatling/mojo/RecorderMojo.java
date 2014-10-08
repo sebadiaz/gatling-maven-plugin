@@ -15,6 +15,8 @@
  */
 package io.gatling.mojo;
 
+import java.nio.file.Paths;
+
 import javax.swing.*;
 
 import io.gatling.recorder.config.RecorderPropertiesBuilder;
@@ -27,8 +29,6 @@ import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.plugins.annotations.ResolutionScope;
 import scala.Option;
-import scala.io.Codec;
-import scala.reflect.io.File;
 
 /**
  * Mojo to run Gatling Recorder.
@@ -115,7 +115,7 @@ public class RecorderMojo extends AbstractMojo {
 		if (packageName != null) props.simulationPackage(packageName);
 		if (encoding != null) props.encoding(encoding);
 		if (followRedirect != null) props.followRedirect(followRedirect);
-		RecorderController.apply(props.build(), Option.apply(new File(new java.io.File(configFile), Codec.UTF8())));
+		RecorderController.apply(props.build(), Option.apply(Paths.get(configFile)));
 		while (JFrame.getFrames().length > 0) {
 			try {
 				Thread.sleep(1000L);
