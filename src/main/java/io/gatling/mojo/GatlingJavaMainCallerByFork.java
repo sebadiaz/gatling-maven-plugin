@@ -32,8 +32,8 @@ import scala_maven_executions.JavaMainCallerByFork;
 
 public class GatlingJavaMainCallerByFork extends JavaMainCallerByFork {
 
-	public GatlingJavaMainCallerByFork(AbstractMojo requester1, String mainClassName1, String classpath, String[] jvmArgs1, String[] args1, boolean forceUseArgFile, Toolchain toolchain, boolean propagateSystemProperties) throws Exception {
-		super(requester1, mainClassName1, classpath, jvmArgs1, args1, forceUseArgFile, toolchain);
+	public GatlingJavaMainCallerByFork(AbstractMojo requester1, String mainClassName1, String classpath, String[] jvmArgs1, String[] args1, Toolchain toolchain, boolean propagateSystemProperties) throws Exception {
+		super(requester1, mainClassName1, classpath, jvmArgs1, args1, false, toolchain);
 
 		if (propagateSystemProperties) {
 			for (Entry<Object, Object> systemProp : System.getProperties().entrySet()) {
