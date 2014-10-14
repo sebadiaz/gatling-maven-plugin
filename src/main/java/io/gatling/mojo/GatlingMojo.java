@@ -234,7 +234,9 @@ public class GatlingMojo extends AbstractMojo {
 	}
 
 	private List<String> zincJvmArgs() {
-		return zincJvmArgs != null ? zincJvmArgs : asList(ZINC_JVM_ARGS);
+		List<String> args = zincJvmArgs != null ? zincJvmArgs : asList(ZINC_JVM_ARGS);
+		args.add("-Dgatling.core.directory.simulations=" + simulationsFolder);
+		return args;
 	}
 
 	private List<String> gatlingArgs() throws Exception {
