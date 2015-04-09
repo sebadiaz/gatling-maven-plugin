@@ -196,7 +196,7 @@ public class GatlingMojo extends AbstractMojo {
 	@Parameter(defaultValue = "${project.remoteArtifactRepositories}")
 	protected List<ArtifactRepository> remoteRepos;
 
-	@Parameter(defaultValue = "false")
+	@Parameter(property = "gatling.displayCmd",defaultValue = "false")
 	private boolean displayCmd;
 
 	/**
