@@ -196,6 +196,9 @@ public class GatlingMojo extends AbstractMojo {
 	@Parameter(defaultValue = "${project.remoteArtifactRepositories}")
 	protected List<ArtifactRepository> remoteRepos;
 
+	@Parameter(defaultValue = "false")
+	private boolean displayCmd;
+
 	/**
 	 * Executes Gatling simulations.
 	 */
@@ -228,8 +231,8 @@ public class GatlingMojo extends AbstractMojo {
 		JavaMainCaller compilerCaller = new GatlingJavaMainCallerByFork(this, COMPILER_MAIN_CLASS, compilerClasspath, zincJvmArgs, compilerArguments, toolchain, propagateSystemProperties);
 		JavaMainCaller gatlingCaller = new GatlingJavaMainCallerByFork(this, GATLING_MAIN_CLASS, testClasspath, gatlingJvmArgs, gatlingArgs, toolchain, propagateSystemProperties);
 		try {
-			compilerCaller.run(false);
-			gatlingCaller.run(false);
+			compilerCaller.run(displayCmd);
+			gatlingCaller.run(displayCmd);
 		} catch (ExecuteException e) {
 			if (e.getExitValue() == 2)
 				throw new GatlingSimulationAssertionsFailedException(e);
